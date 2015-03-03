@@ -3,10 +3,12 @@ require 'sinatra/base'
 require 'rack-flash'
 require 'sinatra/flash'
 require 'data_mapper'
+require 'rest_client'
 require './app/data_mapper_setup'
 
 require './app/helpers/current_user'
 require './app/helpers/date_format'
+require './app/helpers/email_sender'
 
 require './app/controllers/users_controller.rb'
 require './app/controllers/cheeps_controller.rb'
@@ -19,6 +21,7 @@ class Chitter < Sinatra::Base
 
   include CurrentUser
   include DateFormat
+  include EmailSender
 
   get '/' do
     @all_cheeps = Cheep.all.reverse
@@ -35,6 +38,9 @@ class Chitter < Sinatra::Base
     user.password_token = token
     user.password_token_timestamp = Time.now
     user.save
+    send_simple_message(user.email, token)
+    flash.now[:message] = "A link to reset your password has been emailed to you."
+    erb :"users/reset_password"
   end
 
   get '/users/reset_password/:token' do
@@ -58,7 +64,7 @@ class Chitter < Sinatra::Base
       user.save
       user.update(password_token: nil)
       user.update(password_token_timestamp: nil)
-      redirect to('/')
+      redirect to('/users/sign_in')
     end
   end
 
