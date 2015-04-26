@@ -7,6 +7,7 @@ gem 'bcrypt'
 gem 'sinatra-flash'
 gem 'rack-flash3'
 gem 'rest_client'
+gem 'bootstrap-sass'
 
 gem 'rspec'
 gem 'cucumber'

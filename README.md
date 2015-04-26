@@ -1,50 +1,42 @@
-Chitter Challenge
-=================
+# Chitter Challenge
 
-* Challenge time: Friday afternoon (+ weekend if you need it)
-* Feel free to use google, your notes, books, etc but work on your own
-* You must submit a pull request to this repo with your code by 9am Monday morning
+## Synopsis
 
-Challenge:
--------
+Following [this challenge brief](https://github.com/makersacademy/chitter-challenge), I created a twitter clone using the DSL Sinatra. Although it would have been faster to use Rails and its many gems to prototype features such as user management, creating this by hand taught me a lot about using PostgreSQL and bcrypt.
 
-As usual please start by 
 
-* Filling out your learning plan self review for the week: https://github.com/makersacademy/learning_plan (if you haven't already)
-* Forking this repo
+## Technologies Used
 
-We are going to write a little Twitter clone that will allow the users to post messages to a public stream.
+- Ruby
+- Sinatra
+- PostgreSQL
+- DataMapper
+- Tested using Cucumber and Capybara
+- Twitter Bootstrap
 
-Features:
--------
 
-* In order to use chitter as a maker I want to sign up to the service
-* In order to user chitter as a maker I want to log in
-* In order to avoid others using my account as a maker I want to log out
-* In order to let people know what I am doing as a maker I want to post a message (peep) to chitter
-* In order to see what people have to say as a maker I want to see all peeps in chronological order
+## Favourite Code Snippet
 
-Notes:
-------
+```ruby
+def self.authenticate(email, password)
+    user = first(email: email)
+    if user
+      BCrypt::Password.new(user.password_digest) == password ? user : false
+    else
+      nil
+    end
+  end
+```
 
-* Makers sign up to chitter with their email, password, name and a user name (e.g. sam@makersacademy.com, s3cr3t, Samuel Russell Hampden Joseph, tansaku).
-* The username and email are unique.
-* Peeps (posts to chitter) have the name of the maker and their user handle.
-* Use bcrypt to secure the passwords.
-* Use data mapper and postgres to save the data.
-* You don't have to be logged in to see the peeps.
-* You only can peep if you are logged in.
-* Finally submit a pull request before Monday at 9am with your solution or partial solution.  However much or little amount of code you wrote please please please submit a pull request before Monday at 9am
+Before working on this app, I hadn't built a user management system from scratch and consequently hadn't fully understood the way in which password encryption works. Although this method contains a nested if statement, I believe it is still efficient for its purpose.
 
-Bonus:
------
 
-If you have time you can implement the following:
+## Further Refactoring Opportunities
 
-* In order to start a conversation as a maker I want to reply to a peep from another maker.
+- The only thing holding this code back from receiving a 4.0 GPA on code climate is the Users controller. The code within the routes is quite complex and could be extracted out into helper methods. Alternatively, I could replace this functionality with an authentication gem such as [Sinatra::Warden](https://github.com/jsmestad/sinatra_warden)
 
-And/Or:
 
-* Work on the css to make it look good (we all like beautiful things).
+## Takeaway
 
-Good luck and let the chitter begin!
+- Whilst working on this project I learned more about Sinatra, and it helped me to understand the benefits of using a lightweight framework.
+- Through manually testing the app as I built it, I became adept at managing a PostgreSQL database directly using SQL.
